@@ -1,0 +1,3 @@
+CP2K Editor is a simple GUI for the atomistic program CP2K. It is a easy and fast way to create the complex input file used in CP2K.
+The CP2K Editor is started by running the script Editor.py with your python enviroment.
+To run CP2K Editor fully, the python packages Tkinter, Matplotlib, Numpy, Copy, SYS, and OS are reuqired in the python enviroments. 

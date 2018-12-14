@@ -1,0 +1,10 @@
+CP2K Editor License
+
+Copyright (c) 2018 Andreas Lynge Vishart
+
+Permission granted to freely use of the script for CP2K Editor. 
+The GUI is allowed to be used by anyone and can be presented.
+However, the scripts are not allowed to be modified without permission from the developers. The source-code must not be copied or sold. 
+If CP2K Editor is used for work published, please refer to the program. Citation and acknowledgment is appreciated.
+
+ 
