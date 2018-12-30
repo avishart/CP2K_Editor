@@ -170,7 +170,7 @@ def save_entries():
     SUBSYS["CHARGE"]=SS_Charge_entry.get()
     SUBSYS["FIXED"]=SS_fixed_atoms_entry.get()
     SUBSYS["TARGET1"]=SS_target1_entry.get()
-    SUBSYS["TARGET2"]=SS_target2_entry.get()
+    SUBSYS["TARGET2"]=str(float(SUBSYS["TARGET1"])+2)
     SUBSYS["ATOMS_FRAG1"]=SS_frag1_entry.get()
     SUBSYS["ATOMS_FRAG2"]=SS_frag2_entry.get()
     EXT_RESTART["RESTART_EACH"]=save_restart_entry.get()
@@ -257,7 +257,19 @@ def Generate_cutoff_test():
 
 #Analyse 
 
-#CDFT details
+#CDFT charge on fragments details
+def CDFT_charge_function():
+    if str(sys.version)[0]=="3":
+        import scr.Analyse_CDFT_charge as Analyse_CDFT_charge
+    elif str(sys.version)[0]=="2":
+        import Analyse_CDFT_charge as Analyse_CDFT_charge
+    try:
+        popup_cdft_start=Analyse_CDFT_charge.CDFT_start_popup()
+    except:
+        popup_cdft_start=popup_error_file(cdft_detail_file)
+    popup_cdft_start.mainloop()
+
+#CDFT electronic coupling details
 def CDFT_details_function():
     cdft_detail_file=filedialog.askopenfilename(initialdir="./",title = "Select output file",filetypes = (("OUT files","*.out"),("all files","*")))
     if str(cdft_detail_file)!="":
@@ -462,10 +474,13 @@ def Properties_button_click(proper):
     GLOBAL["PROPERTIES"]=proper
     properties_btn.config(text=GLOBAL["PROPERTIES"])
     if GLOBAL["PROPERTIES"]=="NONE":
-        properties_info_nstates_label.grid_forget()
-        properties_info_nstates_entry.grid_forget()
-        each_label.grid_forget()
-        each_entry.grid_forget()
+        properties_info_nstates_label.grid_forget();properties_info_nstates_entry.grid_forget()
+        each_label.grid_forget();each_entry.grid_forget()
+        SS_target1_label.grid_forget();SS_target1_entry.grid_forget()
+        SS_frag1_label.grid_forget();SS_frag1_entry.grid_forget()
+        SS_frag2_label.grid_forget();SS_frag2_entry.grid_forget()
+        if GLOBAL["RUN_TYPE"]=="ENERGY":
+            SS_fixed_atoms_label.grid_forget();SS_fixed_atoms_entry.grid_forget()
     else:
         if GLOBAL["RUN_TYPE"]!="ENERGY":
             each_label.grid(row=6,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"])
@@ -477,13 +492,11 @@ def Properties_button_click(proper):
             properties_info_nstates_label.grid_forget()
             properties_info_nstates_entry.grid_forget()
         if GLOBAL["PROPERTIES"]=="CDFT":
-            SS_target1_label.grid(row=10,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"]);SS_target1_entry.grid(row=10,column=1)
-            SS_target2_label.grid(row=11,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"]);SS_target2_entry.grid(row=11,column=1)
-            SS_frag1_label.grid(row=12,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"]);SS_frag1_entry.grid(row=12,column=1)
-            SS_frag2_label.grid(row=13,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"]);SS_frag2_entry.grid(row=13,column=1)
+            SS_frag1_label.grid(row=10,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"]);SS_frag1_entry.grid(row=10,column=1)
+            SS_frag2_label.grid(row=11,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"]);SS_frag2_entry.grid(row=11,column=1)
+            SS_target1_label.grid(row=12,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"]);SS_target1_entry.grid(row=12,column=1)            
         else:
             SS_target1_label.grid_forget();SS_target1_entry.grid_forget()
-            SS_target2_label.grid_forget();SS_target2_entry.grid_forget()
             SS_frag1_label.grid_forget();SS_frag1_entry.grid_forget()
             SS_frag2_label.grid_forget();SS_frag2_entry.grid_forget()
         if GLOBAL["PROPERTIES"]=="VIBRATIONAL_ANALYSIS":
@@ -812,7 +825,7 @@ def MT_MD_Thermostat_button_click(thermo):
 #Choose coord file for replica 1
 def MT_BAND_initial_find_file_click():
     global MOTION
-    MT_BAND_initial_filename=filedialog.askopenfilename(initialdir = "./",title = "Select Coord. file",filetypes = (("XYZ files","*.xyz"),("COORD files","*.coord"),("CIF files","*.cif"),("CRD files","*.crd"),("G96 files","*.g96"),("PDB files","*.pdb"),("XTL files","*.xtl"),("all files","*.*")))
+    MT_BAND_initial_filename=filedialog.askopenfilename(initialdir = "./",title = "Select Coord. file",filetypes = (("XYZ files","*.xyz"),("COORD files","*.coord"),("all files","*.*")))
     if str(MT_BAND_initial_filename)!="":
         MOTION["REPLICA1"]=str(MT_BAND_initial_filename)
         MT_BAND_initial_entry.delete(0,tk.END)
@@ -821,7 +834,7 @@ def MT_BAND_initial_find_file_click():
 #Choose coord file for replica 2
 def MT_BAND_interm_find_file_click():
     global MOTION
-    MT_BAND_interm_filename=filedialog.askopenfilename(initialdir = "./",title = "Select Coord. file",filetypes = (("XYZ files","*.xyz"),("COORD files","*.coord"),("CIF files","*.cif"),("CRD files","*.crd"),("G96 files","*.g96"),("PDB files","*.pdb"),("XTL files","*.xtl"),("all files","*.*")))
+    MT_BAND_interm_filename=filedialog.askopenfilename(initialdir = "./",title = "Select Coord. file",filetypes = (("XYZ files","*.xyz"),("COORD files","*.coord"),("all files","*.*")))
     if str(MT_BAND_interm_filename)!="":
         MOTION["REPLICA2"]=str(MT_BAND_interm_filename)
         MT_BAND_interm_entry.delete(0,tk.END)
@@ -830,7 +843,7 @@ def MT_BAND_interm_find_file_click():
 #Choose coord file for replica 3
 def MT_BAND_final_find_file_click():
     global MOTION
-    MT_BAND_final_filename=filedialog.askopenfilename(initialdir = "./",title = "Select Coord. file",filetypes = (("XYZ files","*.xyz"),("COORD files","*.coord"),("CIF files","*.cif"),("CRD files","*.crd"),("G96 files","*.g96"),("PDB files","*.pdb"),("XTL files","*.xtl"),("all files","*.*")))
+    MT_BAND_final_filename=filedialog.askopenfilename(initialdir = "./",title = "Select Coord. file",filetypes = (("XYZ files","*.xyz"),("COORD files","*.coord"),("all files","*.*")))
     if str(MT_BAND_final_filename)!="":
         MOTION["REPLICA3"]=str(MT_BAND_final_filename)
         MT_BAND_final_entry.delete(0,tk.END)
@@ -886,7 +899,8 @@ functionmenu.add_command(label="Cutoff test", command=Generate_cutoff_test)
 menubar.add_cascade(label="Function", menu=functionmenu)
 #Analyse
 analysemenu=tk.Menu(menubar,tearoff=0)
-analysemenu.add_command(label="CDFT", command=CDFT_details_function)
+analysemenu.add_command(label="CDFT charge", command=CDFT_charge_function)
+analysemenu.add_command(label="CDFT coupling", command=CDFT_details_function)
 analysemenu.add_command(label="Convergence", command=Convergence_function)
 analysemenu.add_command(label="Cutoff test", command=Analyse_cutoff_test_function)
 analysemenu.add_command(label="MD energy", command=MD_energy_temp_function)
@@ -1597,34 +1611,10 @@ if GLOBAL["RUN_TYPE"]=="ENERGY" and GLOBAL["PROPERTIES"]!="VIBRATIONAL_ANALYSIS"
 
 
 #CDFT target value
-#Make label for target valence electrons
-i+=1
-j=0
-SS_target1_label=tk.Label(SUBSYS_Frame,text="Target valence 1: ")
-SS_target1_label.grid(row=i,column=j,sticky=tk.W,pady=PROGRAM["pady_line_size"])
-j+=1
-#Make Entry for target valence electrons
-SS_target1_entry=tk.Entry(SUBSYS_Frame,justify=tk.LEFT)
-#Give the default target value
-SS_target1_entry.insert(tk.END,SUBSYS["TARGET1"])
-SS_target1_entry.grid(row=i,column=j)
-j+=1
-#Make label for target valence electrons
-i+=1
-j=0
-SS_target2_label=tk.Label(SUBSYS_Frame,text="Target valence 2: ")
-SS_target2_label.grid(row=i,column=j,sticky=tk.W,pady=PROGRAM["pady_line_size"])
-j+=1
-#Make Entry for target valence electrons
-SS_target2_entry=tk.Entry(SUBSYS_Frame,justify=tk.LEFT)
-#Give the default target value
-SS_target2_entry.insert(tk.END,SUBSYS["TARGET2"])
-SS_target2_entry.grid(row=i,column=j)
-j+=1
 #Make label for atoms in fragment 1
 i+=1
 j=0
-SS_frag1_label=tk.Label(SUBSYS_Frame,text="Atoms in fragment 1: ")
+SS_frag1_label=tk.Label(SUBSYS_Frame,text="Atoms in fragment 1 (F1): ")
 SS_frag1_label.grid(row=i,column=j,sticky=tk.W,pady=PROGRAM["pady_line_size"])
 j+=1
 #Make Entry for atoms in fragment 1
@@ -1636,7 +1626,7 @@ j+=1
 #Make label for atoms in fragment 2
 i+=1
 j=0
-SS_frag2_label=tk.Label(SUBSYS_Frame,text="Atoms in fragment 2: ")
+SS_frag2_label=tk.Label(SUBSYS_Frame,text="Atoms in fragment 2 (F2): ")
 SS_frag2_label.grid(row=i,column=j,sticky=tk.W,pady=PROGRAM["pady_line_size"])
 j+=1
 #Make Entry for atoms in fragment 2
@@ -1645,13 +1635,25 @@ SS_frag2_entry=tk.Entry(SUBSYS_Frame,justify=tk.LEFT)
 SS_frag2_entry.insert(tk.END,SUBSYS["ATOMS_FRAG2"])
 SS_frag2_entry.grid(row=i,column=j)
 j+=1
+#Make label for target valence electrons
+i+=1
+j=0
+SS_target1_label=tk.Label(SUBSYS_Frame)
+SS_target1_label_txt="Charge difference (|F2|-|F1"+u"\u207b"+"|): "
+SS_target1_label.config(text=SS_target1_label_txt)
+SS_target1_label.grid(row=i,column=j,sticky=tk.W,pady=PROGRAM["pady_line_size"])
+j+=1
+#Make Entry for target valence electrons
+SS_target1_entry=tk.Entry(SUBSYS_Frame,justify=tk.LEFT)
+#Give the default target value
+SS_target1_entry.insert(tk.END,SUBSYS["TARGET1"])
+SS_target1_entry.grid(row=i,column=j)
+j+=1
 
 #CDFT have to be the property
 if GLOBAL["PROPERTIES"]!="CDFT":
     SS_target1_label.grid_forget()
     SS_target1_entry.grid_forget()
-    SS_target2_label.grid_forget()
-    SS_target2_entry.grid_forget()
     SS_frag1_label.grid_forget()
     SS_frag1_entry.grid_forget()
     SS_frag2_label.grid_forget()
@@ -1996,7 +1998,7 @@ elif GLOBAL["RUN_TYPE"].upper()=="BAND":
 
 
 #Run the program-----
-Interface.lift()
+#Interface.lift()
 GLOBAL_Frame.lift()
 sec_global.config(fg="blue")
 Interface.mainloop()
