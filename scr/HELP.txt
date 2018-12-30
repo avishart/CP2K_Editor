@@ -86,10 +86,9 @@ Charge: Give the charge of the total system.
 Fixed atoms: Select which atoms to fix in a dynamic calculation or VIBRATIONAL_ANALYSIS calculation (e.g. 1-7,9,12 or 1..7 9 12). 
 
 CDFT part:
-Target valence 1: For a CDFT calculation, give the target number of electrons for first state.
-Target valence 2: For a CDFT calculation, give the target number of electrons for second state.
 Atoms in fragment 1: Give the atoms that shall be constrained in the first fragment. (E.g. 1-7,9,12 or 1..7 9 12)
 Atoms in fragment 2: Give the atoms that shall be constrained in the second fragment.
+Charge difference: The difference between the number of electrons at fragment 2 and fragment 1 with the transfer electron at fragment 1 (|F2|-|F1^-|). The CDFT calculation use the charge difference as the target value for the first state. The charge difference plus 2 is used for the CDFT calculation for the second state. Remember to check if the all or only the valence electrons are used.
 
 
 ---------EXT_RESTART--------

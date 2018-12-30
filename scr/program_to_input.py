@@ -501,51 +501,43 @@ def Motion_BAND(space,tab,GLOBAL,FORCE_EVAL,SUBSYS,EXT_RESTART,MOTION):
     #Replica for intial strucutre
     content_BAND+=space+"&REPLICA\n"
     space+="  "
-    content_BAND+=space+"&TOPOLOGY"+"\n"
-    space+="  "
     if MOTION["REPLICA1"]!="":
         if str(list(MOTION["REPLICA1"].split("."))[-1]).lower()=="coord":
-            content_BAND+=space+"COORD_FILE_FORMAT"+tab+"CP2K"+"\n"
+            content_BAND+=space+"&COORD"+"\n"
+            space+="  "
+            content_BAND+=space+"@INCLUDE"+tab+MOTION["REPLICA1"]+"\n"
+            space=space[:-2]
+            content_BAND+=space+"&END COORD"+"\n"
         else:
-            content_BAND+=space+"COORD_FILE_FORMAT"+tab+str(list(MOTION["REPLICA1"].split("."))[-1])+"\n"
-        content_BAND+=space+"COORD_FILE_NAME"+tab+MOTION["REPLICA1"]+"\n"
-    if SUBSYS["CENTER_COORDINATES"]=="TRUE":
-        content_BAND+=space+"&CENTER_COORDINATES"+"\n"
-        content_BAND+=space+"&END CENTER_COORDINATES"+"\n"
-    space=space[:-2]
-    content_BAND+=space+"&END TOPOLOGY"+"\n"
+            content_BAND+=space+"COORD_FILE_NAME"+tab+MOTION["REPLICA1"]+"\n"
     space=space[:-2]
     content_BAND+=space+"&END REPLICA\n"
     #Replica for intermediate structure, but is not a requirement 
     if MOTION["REPLICA2"]!="":
         content_BAND+=space+"&REPLICA\n"
         space+="  "
-        if str(list(MOTION["REPLICA1"].split("."))[-1]).lower()=="coord":
-            content_BAND+=space+"COORD_FILE_FORMAT"+tab+"CP2K"+"\n"
+        if str(list(MOTION["REPLICA2"].split("."))[-1]).lower()=="coord":
+            content_BAND+=space+"&COORD"+"\n"
+            space+="  "
+            content_BAND+=space+"@INCLUDE"+tab+MOTION["REPLICA2"]+"\n"
+            space=space[:-2]
+            content_BAND+=space+"&END COORD"+"\n"
         else:
-            content_BAND+=space+"COORD_FILE_FORMAT"+tab+str(list(MOTION["REPLICA2"].split("."))[-1])+"\n"
-        content_BAND+=space+"COORD_FILE_NAME"+tab+MOTION["REPLICA2"]+"\n"
-        if SUBSYS["CENTER_COORDINATES"]=="TRUE":
-            content_BAND+=space+"&CENTER_COORDINATES"+"\n"
-            content_BAND+=space+"&END CENTER_COORDINATES"+"\n"
-        space=space[:-2]
-        content_BAND+=space+"&END TOPOLOGY"+"\n"
+            content_BAND+=space+"COORD_FILE_NAME"+tab+MOTION["REPLICA2"]+"\n"
         space=space[:-2]
         content_BAND+=space+"&END REPLICA\n"
     #Replica for final structure 
     content_BAND+=space+"&REPLICA\n"
     space+="  "
     if MOTION["REPLICA3"]!="":
-        if str(list(MOTION["REPLICA1"].split("."))[-1]).lower()=="coord":
-            content_BAND+=space+"COORD_FILE_FORMAT"+tab+"CP2K"+"\n"
+        if str(list(MOTION["REPLICA3"].split("."))[-1]).lower()=="coord":
+            content_BAND+=space+"&COORD"+"\n"
+            space+="  "
+            content_BAND+=space+"@INCLUDE"+tab+MOTION["REPLICA3"]+"\n"
+            space=space[:-2]
+            content_BAND+=space+"&END COORD"+"\n"
         else:
-            content_BAND+=space+"COORD_FILE_FORMAT"+tab+str(list(MOTION["REPLICA3"].split("."))[-1])+"\n"
-        content_BAND+=space+"COORD_FILE_NAME"+tab+MOTION["REPLICA3"]+"\n"
-    if SUBSYS["CENTER_COORDINATES"]=="TRUE":
-        content_BAND+=space+"&CENTER_COORDINATES"+"\n"
-        content_BAND+=space+"&END CENTER_COORDINATES"+"\n"
-    space=space[:-2]
-    content_BAND+=space+"&END TOPOLOGY"+"\n"
+            content_BAND+=space+"COORD_FILE_NAME"+tab+MOTION["REPLICA3"]+"\n"
     space=space[:-2]
     content_BAND+=space+"&END REPLICA\n"
     space=space[:-2]

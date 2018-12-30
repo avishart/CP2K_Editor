@@ -293,8 +293,12 @@ def Force_Eval_CDFT(space,tab,target_value,strength_value,filename,FORCE_EVAL,SU
     content_CDFT_Atom_frag1=str(SUBSYS["ATOMS_FRAG1"])
     content_CDFT_Atom_frag1=content_CDFT_Atom_frag1.replace("-","..")
     content_CDFT_Atom_frag1=content_CDFT_Atom_frag1.replace(","," ")
-    content_CDFT+=space+"ATOMS"+tab+content_CDFT_Atom_frag1+"\n"
+    content_CDFT_Atom_frag2=str(SUBSYS["ATOMS_FRAG2"])
+    content_CDFT_Atom_frag2=content_CDFT_Atom_frag2.replace("-","..")
+    content_CDFT_Atom_frag2=content_CDFT_Atom_frag2.replace(","," ")
+    content_CDFT+=space+"ATOMS"+tab+content_CDFT_Atom_frag1+" "+content_CDFT_Atom_frag2+"\n"
     CDFT_Atom_frag1_list=list(filter(None,content_CDFT_Atom_frag1.split(" ")))
+    CDFT_Atom_frag2_list=list(filter(None,content_CDFT_Atom_frag2.split(" ")))
     number_atom_frag1=[]
     for ele in CDFT_Atom_frag1_list:
         if ".." in ele:
@@ -306,18 +310,21 @@ def Force_Eval_CDFT(space,tab,target_value,strength_value,filename,FORCE_EVAL,SU
                 print("Error in fragment")
         else:
             number_atom_frag1.append(ele)
-    content_CDFT+=space+"COEFF"+tab+"1 "*len(number_atom_frag1)+"\n"
+    number_atom_frag2=[]
+    for ele in CDFT_Atom_frag2_list:
+        if ".." in ele:
+            newele=list(ele.split(".."))
+            if int(newele[0])<=int(newele[-1])+1:
+                for num in range(int(newele[0]),int(newele[-1])+1):
+                    number_atom_frag2.append(num)
+            else:
+                print("Error in fragment")
+        else:
+            number_atom_frag2.append(ele)
+    content_CDFT+=space+"COEFF"+tab+"1 "*len(number_atom_frag1)+"-1 "*len(number_atom_frag2)+"\n"
     content_CDFT+=space+"CONSTRAINT_TYPE"+tab+"CHARGE"+"\n"
     space=space[:-2]
     content_CDFT+=space+"&END ATOM_GROUP"+"\n"
-    content_CDFT+=space+"&DUMMY_ATOMS"+"\n"
-    space+="  "
-    content_CDFT_Atom_frag2=str(SUBSYS["ATOMS_FRAG2"])
-    content_CDFT_Atom_frag2=content_CDFT_Atom_frag2.replace("-","..")
-    content_CDFT_Atom_frag2=content_CDFT_Atom_frag2.replace(","," ")
-    content_CDFT+=space+"ATOMS"+tab+content_CDFT_Atom_frag2+"\n"
-    space=space[:-2]
-    content_CDFT+=space+"&END DUMMY_ATOMS"+"\n"
     content_CDFT+=space+"&PROGRAM_RUN_INFO"+tab+"ON"+"\n"
     space+="  "
     content_CDFT+=space+"&EACH"+"\n"
@@ -580,51 +587,43 @@ def Motion_BAND(space,tab,GLOBAL,FORCE_EVAL,SUBSYS,EXT_RESTART,MOTION):
     #Replica for intial strucutre
     content_BAND+=space+"&REPLICA\n"
     space+="  "
-    content_BAND+=space+"&TOPOLOGY"+"\n"
-    space+="  "
     if MOTION["REPLICA1"]!="":
         if str(list(MOTION["REPLICA1"].split("."))[-1]).lower()=="coord":
-            content_BAND+=space+"COORD_FILE_FORMAT"+tab+"CP2K"+"\n"
+            content_BAND+=space+"&COORD"+"\n"
+            space+="  "
+            content_BAND+=space+"@INCLUDE"+tab+MOTION["REPLICA1"]+"\n"
+            space=space[:-2]
+            content_BAND+=space+"&END COORD"+"\n"
         else:
-            content_BAND+=space+"COORD_FILE_FORMAT"+tab+str(list(MOTION["REPLICA1"].split("."))[-1])+"\n"
-        content_BAND+=space+"COORD_FILE_NAME"+tab+MOTION["REPLICA1"]+"\n"
-    if SUBSYS["CENTER_COORDINATES"]=="TRUE":
-        content_BAND+=space+"&CENTER_COORDINATES"+"\n"
-        content_BAND+=space+"&END CENTER_COORDINATES"+"\n"
-    space=space[:-2]
-    content_BAND+=space+"&END TOPOLOGY"+"\n"
+            content_BAND+=space+"COORD_FILE_NAME"+tab+MOTION["REPLICA1"]+"\n"
     space=space[:-2]
     content_BAND+=space+"&END REPLICA\n"
     #Replica for intermediate structure, but is not a requirement 
     if MOTION["REPLICA2"]!="":
         content_BAND+=space+"&REPLICA\n"
         space+="  "
-        if str(list(MOTION["REPLICA1"].split("."))[-1]).lower()=="coord":
-            content_BAND+=space+"COORD_FILE_FORMAT"+tab+"CP2K"+"\n"
+        if str(list(MOTION["REPLICA2"].split("."))[-1]).lower()=="coord":
+            content_BAND+=space+"&COORD"+"\n"
+            space+="  "
+            content_BAND+=space+"@INCLUDE"+tab+MOTION["REPLICA2"]+"\n"
+            space=space[:-2]
+            content_BAND+=space+"&END COORD"+"\n"
         else:
-            content_BAND+=space+"COORD_FILE_FORMAT"+tab+str(list(MOTION["REPLICA2"].split("."))[-1])+"\n"
-        content_BAND+=space+"COORD_FILE_NAME"+tab+MOTION["REPLICA2"]+"\n"
-        if SUBSYS["CENTER_COORDINATES"]=="TRUE":
-            content_BAND+=space+"&CENTER_COORDINATES"+"\n"
-            content_BAND+=space+"&END CENTER_COORDINATES"+"\n"
-        space=space[:-2]
-        content_BAND+=space+"&END TOPOLOGY"+"\n"
+            content_BAND+=space+"COORD_FILE_NAME"+tab+MOTION["REPLICA2"]+"\n"
         space=space[:-2]
         content_BAND+=space+"&END REPLICA\n"
     #Replica for final structure 
     content_BAND+=space+"&REPLICA\n"
     space+="  "
     if MOTION["REPLICA3"]!="":
-        if str(list(MOTION["REPLICA1"].split("."))[-1]).lower()=="coord":
-            content_BAND+=space+"COORD_FILE_FORMAT"+tab+"CP2K"+"\n"
+        if str(list(MOTION["REPLICA3"].split("."))[-1]).lower()=="coord":
+            content_BAND+=space+"&COORD"+"\n"
+            space+="  "
+            content_BAND+=space+"@INCLUDE"+tab+MOTION["REPLICA3"]+"\n"
+            space=space[:-2]
+            content_BAND+=space+"&END COORD"+"\n"
         else:
-            content_BAND+=space+"COORD_FILE_FORMAT"+tab+str(list(MOTION["REPLICA3"].split("."))[-1])+"\n"
-        content_BAND+=space+"COORD_FILE_NAME"+tab+MOTION["REPLICA3"]+"\n"
-    if SUBSYS["CENTER_COORDINATES"]=="TRUE":
-        content_BAND+=space+"&CENTER_COORDINATES"+"\n"
-        content_BAND+=space+"&END CENTER_COORDINATES"+"\n"
-    space=space[:-2]
-    content_BAND+=space+"&END TOPOLOGY"+"\n"
+            content_BAND+=space+"COORD_FILE_NAME"+tab+MOTION["REPLICA3"]+"\n"
     space=space[:-2]
     content_BAND+=space+"&END REPLICA\n"
     space=space[:-2]

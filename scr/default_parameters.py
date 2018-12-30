@@ -48,8 +48,8 @@ def default_parameters(PROGRAM):
     SUBSYS["VALENCE_ELEMENTS"]=[]
     SUBSYS["CHARGE"]="0"
     SUBSYS["FIXED"]=""
-    SUBSYS["TARGET1"]="0"
-    SUBSYS["TARGET2"]="0"
+    SUBSYS["TARGET1"]="-1.0"
+    SUBSYS["TARGET2"]="1.0"
     SUBSYS["ATOMS_FRAG1"]=""
     SUBSYS["ATOMS_FRAG2"]=""
 
