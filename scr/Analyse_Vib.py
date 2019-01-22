@@ -1,5 +1,10 @@
 #Made by Andreas Vishart
+import matplotlib as mpl
+import platform
+if platform.system()=="Darwin":
+    mpl.use("TkAgg")
 import matplotlib.pyplot as plt
+
 #------------Functions------------------------------
 #Extract excitation data from file
 def extract(filename):

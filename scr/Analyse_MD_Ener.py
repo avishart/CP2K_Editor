@@ -20,6 +20,9 @@ def MD_Ener(filename):
 #Plot the MD energy and temperature
 def plot_MD_Ener(MD_data):
   import matplotlib as mpl
+  import platform
+  if platform.system()=="Darwin":
+    mpl.use("TkAgg")
   import matplotlib.pyplot as plt
   #Get MD data
   Time,Tot_E,Temp2=MD_data

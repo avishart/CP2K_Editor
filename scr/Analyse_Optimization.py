@@ -20,6 +20,9 @@ def Optimization(filename):
 #Plot the Optimization
 def plot_Optimization(Optimization_data):
   import matplotlib as mpl
+  import platform
+  if platform.system()=="Darwin":
+    mpl.use("TkAgg")
   import matplotlib.pyplot as plt
   #Get Optimization data
   Iteration,Energy,energy_change=Optimization_data

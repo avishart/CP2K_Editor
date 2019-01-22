@@ -45,11 +45,12 @@ def epsilon(wavelength_interval,wave_trans,osc_trans,sigma):
     return epsi
 
 #Show Uv-Vis plot with oscillator strength for only one data set
-def plot_uv_vis_osc(uv_vis_data):
+def plot_uv_vis_osc(uv_vis_data,sigma):
     import matplotlib as mpl
+    import platform
+    if platform.system()=="Darwin":
+        mpl.use("TkAgg")
     import matplotlib.pyplot as plt
-    #Full width half maximum [cm^-1]
-    sigma=3226.00
     #Extract excitation data from file
     wave_trans,osc_trans,wavelength_interval=uv_vis_data
     #Calculate the molar absorption coefficitent
@@ -72,3 +73,28 @@ def plot_uv_vis_osc(uv_vis_data):
     plt.tight_layout()
     plt.show()
     plt.close()
+
+def show_uv_vis_plot(uv_vis_data,fwhm_entry):
+    sigma=float(fwhm_entry.get())
+    plot_uv_vis_osc(uv_vis_data,sigma)
+
+def UV_Vis_pop_up(filename):
+    import sys
+    #Python 3
+    if str(sys.version)[0]=="3":
+        import tkinter as tk
+    #Python 2
+    elif str(sys.version)[0]=="2":
+        import Tkinter as tk 
+    uv_vis_data=extract(filename)
+    #Full width half maximum [cm^-1]
+    sigma=3226.00
+    popup_uv_vis=tk.Tk()
+    popup_uv_vis.title("UV-Vis")
+    tk.Label(popup_uv_vis, text="FWHM:").grid(row=1,column=0,sticky=tk.W)
+    fwhm_entry=tk.Entry(popup_uv_vis)
+    fwhm_entry.insert(tk.END,sigma)
+    fwhm_entry.grid(row=1,column=2,sticky=tk.W)
+    tk.Button(popup_uv_vis, text="Show", command=lambda uv_vis_data=uv_vis_data: show_uv_vis_plot(uv_vis_data,fwhm_entry)).grid(row=2,column=1)
+    tk.Button(popup_uv_vis, text="Close", command = popup_uv_vis.destroy).grid(row=3,column=1)
+    return popup_uv_vis

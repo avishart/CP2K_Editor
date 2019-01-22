@@ -85,6 +85,9 @@ def Cutoff_test(foldername):
 #Show and plot the cutoff test
 def plot_cutoff_test(cutoff_data):
     import matplotlib as mpl
+    import platform
+    if platform.system()=="Darwin":
+        mpl.use("TkAgg")
     import matplotlib.pyplot as plt
     #Get cutoff data
     pw_cutoff_new,rel_energy_pw,gau_cutoff_new,rel_energy_gau,Conv_pw,Conv_gau,max_scf=cutoff_data
