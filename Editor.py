@@ -360,11 +360,10 @@ def UV_Vis_function():
         elif str(sys.version)[0]=="2":
             import Analyse_UV_Vis as Analyse_UV_Vis
         try:
-            UV_Vis_analyse_data=Analyse_UV_Vis.extract(uvvis_file)
+            popup_uv_vis=Analyse_UV_Vis.UV_Vis_pop_up(uvvis_file)
         except:
-            popup_error_file(uvvis_file)
-        else:
-            Analyse_UV_Vis.plot_uv_vis_osc(UV_Vis_analyse_data)
+            popup_uv_vis=popup_error_file(uvvis_file)
+        popup_uv_vis.mainloop()
 
 #Vibrational spectrum
 def Vib_function():
