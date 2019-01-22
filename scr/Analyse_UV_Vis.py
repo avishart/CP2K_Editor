@@ -91,7 +91,7 @@ def UV_Vis_pop_up(filename):
     sigma=3226.00
     popup_uv_vis=tk.Tk()
     popup_uv_vis.title("UV-Vis")
-    tk.Label(popup_uv_vis, text="FWHM:").grid(row=1,column=0,sticky=tk.W)
+    tk.Label(popup_uv_vis, text="FWHM [cm"+u"\u207b"+u"\u00B9"+"]:").grid(row=1,column=0,sticky=tk.W)
     fwhm_entry=tk.Entry(popup_uv_vis)
     fwhm_entry.insert(tk.END,sigma)
     fwhm_entry.grid(row=1,column=2,sticky=tk.W)
