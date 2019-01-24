@@ -263,7 +263,7 @@ def Force_Eval_CDFT(space,tab,target_value,strength_value,filename,FORCE_EVAL,SU
     content_CDFT+=space+"ADJUST_SIZE"+tab+"TRUE"+"\n"
     Radii_list=[]
     for ele in SUBSYS["ELEMENTS"]:
-        indi=Elements_type.index(ele)
+        indi=Elements_type.index("".join(s for s in ele if s.isalpha()))
         Radii_list.append(radii[indi])
     content_CDFT_radii=space+"ATOMIC_RADII"+tab
     content_CDFT_cutoff=space+"ELEMENT_CUTOFF"+tab
