@@ -29,8 +29,9 @@ def coord_file_extract(content):
     valence_element=[]
     element_text=""
     for num in range(len(Dif_Elements)):
-        if Dif_Elements[num] in Elements_type:
-            element_index=Elements_type.index(Dif_Elements[num])
+        dif_element_only_letter="".join(s for s in Dif_Elements[num] if s.isalpha())
+        if dif_element_only_letter in Elements_type:
+            element_index=Elements_type.index(dif_element_only_letter)
             valence_e.append(Elements_valence[element_index]*number_elements[num])
             element_text+=str(Dif_Elements[num])+"="+str(number_elements[num])+"; "
             valence_element.append(Elements_valence[element_index])
