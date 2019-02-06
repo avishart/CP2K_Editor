@@ -141,7 +141,7 @@ def Force_Eval_DFT_subsection(space,tab,target_value,strength_value,filename,PRO
     content_DFT+=space+"METHOD"+tab+FORCE_EVAL["QS"]+"\n"
     #For functional with HFX
     if FORCE_EVAL["XC_FUNCTIONAL"] in ["B3LYP","PBE0","CUSTOM"]:
-        content_DFT+=space+"EPS_PGF_ORB"+tab+"1.0E-20"+"\n"
+        content_DFT+=space+"EPS_PGF_ORB"+tab+"1.0E-12"+"\n"
     #CDFT part in DFT
     if GLOBAL["PROPERTIES"]=="CDFT":
         content_DFT+=Force_Eval_CDFT(space,tab,target_value,strength_value,filename,FORCE_EVAL,SUBSYS)

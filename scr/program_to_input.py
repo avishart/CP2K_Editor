@@ -160,7 +160,7 @@ def Force_Eval_DFT_subsection(space,tab,PROGRAM,GLOBAL,FORCE_EVAL,SUBSYS,EXT_RES
     content_DFT+=space+"METHOD"+tab+FORCE_EVAL["QS"]+"\n"
     #For functional with HFX
     if FORCE_EVAL["XC_FUNCTIONAL"] in ["B3LYP","PBE0","CUSTOM"]:
-        content_DFT+=space+"EPS_PGF_ORB"+tab+"1.0E-20"+"\n"
+        content_DFT+=space+"EPS_PGF_ORB"+tab+"1.0E-12"+"\n"
     space=space[:-2]
     content_DFT+=space+"&END QS\n"
     #SCF
