@@ -1,3 +1,3 @@
-CP2K Editor version 2.3.13. December 2018.
+CP2K Editor version 2.3.14. December 2018.
 CP2K Editor is developed by MSc Stud. Andreas L. Vishart and MSc Stud. Nicolai Ree under supervising of Prof., Ph.D., Dr. Scient. Kurt V. Mikkelsen at the Chemistry department of University of Copenhagen.
 For questions please write to kzh262@alumni.ku.dk
