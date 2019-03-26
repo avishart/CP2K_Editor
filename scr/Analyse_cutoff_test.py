@@ -47,33 +47,41 @@ def Cutoff_test(foldername):
     for thefile in all_files:
         if thefile[-4:]==".out":
             filesep=list(thefile[:-4].split("_"))
-            pw_cutoff.append(float(filesep[-1]))
-            gau_cutoff.append(float(filesep[-2]))
-            max_scf=float(filesep[-3])
-            Conv_list=[]
-            conv_num=1
-            with open(foldername+"/"+thefile) as extract:
-                content=extract.readlines()
-            for line in content:
-                #Energy
-                if "ENERGY| Total FORCE_EVAL" in line:
-                    energy.append(float(list(filter(None,line.split(" ")))[-1]))
-                #Convergence data
-                if float(max_scf)>1:
-                    if "SCF WAVEFUNCTION OPTIMIZATION" in line:
-                        Conv_section=True
-                    elif "Electronic density on regular grids" in line:
-                        Conv_section=False
-                    if list(filter(None,line.split(" ")))[0]==str(conv_num) and Conv_section==True:
-                        newline=list(filter(None,line.split(" ")))
-                        if len(newline)==8:
-                            Conv_list.append(float(newline[-2]))
-                        elif len(newline)<8:
-                            Conv_list.append(float(newline[-1]))
-                        conv_num+=1
-            #Use the first and last energy for the convergence
-            if float(max_scf)>1:
-                Conv.append(abs((float(Conv_list[-1])-float(Conv_list[-2]))/float(Conv_list[-2])))
+            try:
+                ener=None
+                pw=float(filesep[-1])
+                gau=float(filesep[-2])
+                max_scf=float(filesep[-3])
+                Conv_list=[]
+                conv_num=1
+                with open(foldername+"/"+thefile) as extract:
+                    content=extract.readlines()
+                for line in content:
+                    #Energy
+                    if "ENERGY| Total FORCE_EVAL" in line:
+                        ener=float(list(filter(None,line.split(" ")))[-1])
+                    #Convergence data
+                    if float(max_scf)>1:
+                        if "SCF WAVEFUNCTION OPTIMIZATION" in line:
+                            Conv_section=True
+                        elif "Electronic density on regular grids" in line:
+                            Conv_section=False
+                        if list(filter(None,line.split(" ")))[0]==str(conv_num) and Conv_section==True:
+                            newline=list(filter(None,line.split(" ")))
+                            if len(newline)==8:
+                                Conv_list.append(float(newline[-2]))
+                            elif len(newline)<8:
+                                Conv_list.append(float(newline[-1]))
+                            conv_num+=1
+                if ener:
+                    #Use the first and last energy for the convergence
+                    if float(max_scf)>1:
+                        Conv.append(abs((float(Conv_list[-1])-float(Conv_list[-2]))/float(Conv_list[-2])))
+                    pw_cutoff.append(pw)
+                    gau_cutoff.append(gau)
+                    energy.append(ener)
+            except:
+                continue
     #Find the relative energy
     E_min=min(energy)
     Energy_list=[abs((e-E_min)/E_min) for e in energy]
