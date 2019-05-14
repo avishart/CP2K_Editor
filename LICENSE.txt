@@ -5,6 +5,7 @@ Copyright (c) 2018 Andreas Lynge Vishart
 Permission granted to freely use of the script for CP2K Editor. 
 The GUI is allowed to be used by anyone and can be presented.
 However, the scripts are not allowed to be modified without permission from the developers. The source-code must not be copied or sold. 
-If CP2K Editor is used for work published, please refer to the program. Citation and acknowledgment is appreciated.
+If CP2K Editor is used for work published, please refer to the program. 
+Please cite: Vishart, A.L., Ree, N. & Mikkelsen, K.V. J Mol Model (2019) 25: 115. https://doi.org/10.1007/s00894-019-3987-6
 
  
