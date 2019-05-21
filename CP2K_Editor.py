@@ -5,6 +5,12 @@
 import os
 import sys
 
+#PROGRAM SETTINGS
+PROGRAM={}
+#The name of the program
+PROGRAM["Program_name"]="CP2K Editor"
+PROGRAM["Script_name"]="CP2K_Editor.py"
+
 #Python 3
 if str(sys.version)[0]=="3":
     import tkinter as tk
@@ -15,7 +21,7 @@ if str(sys.version)[0]=="3":
     import scr.program_to_input_cdft as program_to_input_cdft
 #Python 2
 elif str(sys.version)[0]=="2":
-    sys.path.insert(0, str(os.path.realpath(__file__))[:-len("Editor.py")]+'scr/')
+    sys.path.insert(0, str(os.path.realpath(__file__))[:-len(PROGRAM["Script_name"])]+'scr/')
     import Tkinter as tk
     import tkFileDialog as filedialog
     import coord_file_info as coord_file_info
@@ -24,11 +30,6 @@ elif str(sys.version)[0]=="2":
     import program_to_input_cdft as program_to_input_cdft
                 
 #---------------Parameters----------------
-#PROGRAM SETTINGS
-PROGRAM={}
-#The name of the program
-PROGRAM["Program_name"]="CP2K Editor"
-PROGRAM["Script_name"]="Editor.py"
 #Path to Script
 PROGRAM["Path"]=str(os.path.realpath(__file__))[:-len(PROGRAM["Script_name"])]
 #Size of the windows
