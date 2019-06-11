@@ -39,6 +39,8 @@ def coord_file_extract(content):
             valence_e.append(0*number_elements[num])
             element_text+=str(Dif_Elements[num])+"="+str(number_elements[num])+"; "
             valence_element.append(0)
+        if num%4==0 and num>0:
+            element_text+="\n"
     x_max_dis=max(xyz[0])-min(xyz[0])+2
     y_max_dis=max(xyz[1])-min(xyz[1])+2
     z_max_dis=max(xyz[2])-min(xyz[2])+2
@@ -79,6 +81,8 @@ def cif_file_extract(content):
             valence_e.append(0*number_elements[num])
             element_text+=str(Dif_Elements[num])+"; "
             valence_element.append(0)
+        if num%4==0 and num>0:
+            element_text+="\n"
     ABC="{0:.4f}".format(round(x_max_dis,4))+" "+"{0:.4f}".format(round(y_max_dis,4))+" "+"{0:.4f}".format(round(z_max_dis,4))
     return sum(valence_e),element_text[:-2],Dif_Elements,valence_element,ABC
 

@@ -26,7 +26,10 @@ def extract(filename):
             state=list(filter(None,line.split(" ")))
             for num in range(1,len(state)):
                 intens.append(float(state[num]))
-    return freq,intens,vib_state
+    if len(freq)<1 or len(intens)<1:
+        return None
+    else:
+        return freq,intens,vib_state
 
 def show_vib_plot(filename,freq,intens,vib_state):
     plot_vib(filename,freq,intens,vib_state)
@@ -39,7 +42,7 @@ def plot_vib(filename,freq,intens,vib_state):
     fig,ax1=plt.subplots(figsize=(8,6))
     ax1.bar(freq,intens,width=5,color="r")
     ax1.set_xlabel("Frequency / [cm$^{-1}$]",fontsize=15)
-    ax1.set_ylabel("Intensity / [M$^{-1}$ cm$^{-1}$]",fontsize=15)
+    ax1.set_ylabel("Intensity",fontsize=15)
     ax1.set_xlim(freq[0]-50,freq[-1]+50)
     ax1.set_ylim(0,max(intens)*1.05)
     plt.tight_layout()

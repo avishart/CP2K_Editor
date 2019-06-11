@@ -1,5 +1,5 @@
 #Made by Andreas Vishart
-#Extract the Geometry optimization data from an .xyz file
+#Extract the Geometry optimization data from a .xyz file
 def Optimization(filename):
   #Load the pos file
   with open(filename) as thefile:

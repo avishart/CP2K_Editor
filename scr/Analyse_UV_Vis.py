@@ -74,10 +74,12 @@ def plot_uv_vis_osc(uv_vis_data,sigma):
     plt.show()
     plt.close()
 
+#When the show button is pressed
 def show_uv_vis_plot(uv_vis_data,fwhm_entry):
     sigma=float(fwhm_entry.get())
     plot_uv_vis_osc(uv_vis_data,sigma)
 
+#UV-Vis popup window
 def UV_Vis_pop_up(filename):
     import sys
     #Python 3
@@ -89,8 +91,10 @@ def UV_Vis_pop_up(filename):
     uv_vis_data=extract(filename)
     #Full width half maximum [cm^-1]
     sigma=3226.00
+    #Popup window
     popup_uv_vis=tk.Tk()
     popup_uv_vis.title("UV-Vis")
+    #Full width half maximum entry
     tk.Label(popup_uv_vis, text="FWHM [cm"+u"\u207b"+u"\u00B9"+"]:").grid(row=1,column=0,sticky=tk.W)
     fwhm_entry=tk.Entry(popup_uv_vis)
     fwhm_entry.insert(tk.END,sigma)
