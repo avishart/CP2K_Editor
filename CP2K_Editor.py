@@ -1841,9 +1841,14 @@ class Motion_section_MD:
         if MOTION["ENSEMBLE"]=="NPE_F" or MOTION["ENSEMBLE"]=="NPE_I":
             self.MT_MD_Thermostat_btn.config(state=tk.DISABLED)
             self.MT_MD_TIMECON_entry.config(state=tk.DISABLED)
+            self.MT_MD_TIMECON_label.config(state=tk.DISABLED)
         else:
             self.MT_MD_Thermostat_btn.config(state="normal")
             self.MT_MD_TIMECON_entry.config(state="normal")
+            self.MT_MD_TIMECON_label.config(state="normal")
+        if MOTION["THERMOSTAT"]=="GLE":
+            self.MT_MD_TIMECON_entry.config(state=tk.DISABLED)
+            self.MT_MD_TIMECON_label.config(state=tk.DISABLED)
 
     #Choose the Thermostat
     def MT_MD_Thermostat_button_click(self,thermo):
