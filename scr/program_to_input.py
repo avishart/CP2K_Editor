@@ -445,7 +445,7 @@ def Motion_MD_RT(space,tab,GLOBAL,FORCE_EVAL,SUBSYS,EXT_RESTART,MOTION):
     content_MD_RT+=space+"TIMESTEP"+tab+MOTION["TIMESTEP"]+"\n"
     content_MD_RT+=space+"TEMPERATURE"+tab+MOTION["TEMPERATURE"]+"\n"
     #Thermostat
-    if MOTION["ENSEMBLE"]=="NPE_F" or MOTION["ENSEMBLE"]=="NPE_I":
+    if MOTION["ENSEMBLE"] not in ["LANGEVIN","NPT_F","NPT_I","NVT","NVT_ADIABATIC"]:
         content_MD_RT+=""
     else:
         content_MD_RT+=space+"&THERMOSTAT\n"
@@ -454,7 +454,10 @@ def Motion_MD_RT(space,tab,GLOBAL,FORCE_EVAL,SUBSYS,EXT_RESTART,MOTION):
         if MOTION["THERMOSTAT"]!="GLE":
             content_MD_RT+=space+"&"+MOTION["THERMOSTAT"]+"\n"
             space+="  "
-            content_MD_RT+=space+"TIMECON"+tab+MOTION["TIMECON"]+"\n"
+            if MOTION["THERMOSTAT"]=="AD_LANGEVIN":
+                content_MD_RT+=space+"TIMECON_LANGEVIN"+tab+MOTION["TIMECON"]+"\n"
+            else:
+                content_MD_RT+=space+"TIMECON"+tab+MOTION["TIMECON"]+"\n"
             space=space[:-2]
             content_MD_RT+=space+"&END "+MOTION["THERMOSTAT"]+"\n"
         space=space[:-2]
