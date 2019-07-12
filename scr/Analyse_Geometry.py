@@ -1,6 +1,19 @@
 #Made by Andreas Vishart
 #Plot the Geometry from a .xyz file
 import numpy as np
+import sys
+#Python 3
+if str(sys.version)[0]=="3":
+    import tkinter as tk
+#Python 2
+elif str(sys.version)[0]=="2":
+    import Tkinter as tk 
+import matplotlib as mpl
+import platform
+if platform.system()=="Darwin":
+  mpl.use("TkAgg")
+import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D 
 
 #Extract detail for elements and cell size from xyz or coord file
 def coord_file_extract(filename):
@@ -92,13 +105,7 @@ def bond_length_element(element1,element2,Elements):
   return bond_len
 
 #Plot the Geometry
-def plot_Geometry(elements_coord):
-  import matplotlib as mpl
-  import platform
-  if platform.system()=="Darwin":
-    mpl.use("TkAgg")
-  import matplotlib.pyplot as plt
-  from mpl_toolkits.mplot3d import Axes3D 
+def plot_Geometry(elements_coord,ABC):
   Elements=Atom_properties()
   #Plot the data
   fig=plt.figure()
@@ -117,6 +124,22 @@ def plot_Geometry(elements_coord):
       bonds_list=bonds_between_atoms(elements_coord[key1],elements_coord[key2],bond_len)
       for i in range(len(bonds_list)):
         ax.plot(bonds_list[i][0],bonds_list[i][1],bonds_list[i][2],"k-")
+  #Plot cell
+  ABC_cell=list(filter(None,ABC.replace("\n","").split(" ")))
+  ABC_cell=[float(dim) for dim in ABC_cell]
+  if ABC_cell!=[0.00,0.00,0.00]:
+    ax.plot([0,ABC_cell[0]],[0,0],[0,0],"k-")
+    ax.plot([0,0],[0,ABC_cell[1]],[0,0],"k-")
+    ax.plot([0,0],[0,0],[0,ABC_cell[2]],"k-")
+    ax.plot([0,ABC_cell[0]],[ABC_cell[1],ABC_cell[1]],[0,0],"k-")
+    ax.plot([ABC_cell[0],ABC_cell[0]],[0,ABC_cell[1]],[0,0],"k-")
+    ax.plot([0,0],[ABC_cell[1],ABC_cell[1]],[0,ABC_cell[2]],"k-")
+    ax.plot([ABC_cell[0],ABC_cell[0]],[0,0],[0,ABC_cell[2]],"k-")
+    ax.plot([ABC_cell[0],ABC_cell[0]],[ABC_cell[1],ABC_cell[1]],[0,ABC_cell[2]],"k-")
+    ax.plot([0,ABC_cell[0]],[0,0],[ABC_cell[2],ABC_cell[2]],"k-")
+    ax.plot([0,0],[0,ABC_cell[1]],[ABC_cell[2],ABC_cell[2]],"k-")
+    ax.plot([0,ABC_cell[0]],[ABC_cell[1],ABC_cell[1]],[ABC_cell[2],ABC_cell[2]],"k-")
+    ax.plot([ABC_cell[0],ABC_cell[0]],[0,ABC_cell[1]],[ABC_cell[2],ABC_cell[2]],"k-")
   ax.set_xlabel("x / [Angstrom]",fontsize=15)
   ax.set_ylabel("y / [Angstrom]",fontsize=15)
   ax.set_zlabel("z / [Angstrom]",fontsize=15)
@@ -128,3 +151,50 @@ def plot_Geometry(elements_coord):
   plt.show()
   plt.close()
 
+
+#Geometry popup window
+class Geometry_popup:
+  def __init__(self,master,filename):
+    #Extract elements data from file
+    self.dif_Elements=coord_file_extract(filename)
+    #Cell size
+    self.ABC="0.00 0.00 0.00"
+    #Make popup window
+    master.title("Geometry")
+    #Cell shows
+    self.ABC_check_label=tk.Label(master,text="Show cell:").grid(row=0,column=0,sticky=tk.W)
+    self.ABC_size_entry=tk.Entry(master,justify=tk.LEFT)
+    self.ABC_size_entry.insert(tk.END,self.ABC)
+    self.ABC_size_entry.config(state=tk.DISABLED)
+    self.ABC_check_var=tk.StringVar(master)
+    self.ABC_check=tk.Checkbutton(master,variable=self.ABC_check_var,onvalue="TRUE",offvalue="FALSE",state="normal",command=lambda: self.ABC_check_command())
+    self.ABC_check.deselect()
+    self.ABC_check.grid(row=0,column=3,sticky=tk.W)
+    self.ABC_size_label=tk.Label(master,text="Cell size:").grid(row=1,column=0,sticky=tk.W)
+    self.ABC_size_entry.grid(row=1,column=3,sticky="WE")
+    tk.Button(master, text="Show", command=lambda filename=filename: self.Show_Geometry()).grid(row=2,column=1,sticky="WE")
+    tk.Button(master, text="Close", command = master.destroy).grid(row=3,column=1,sticky="WE")
+
+  #The checkbutton command
+  def ABC_check_command(self):
+    if self.ABC_check_var.get()=="TRUE":
+      self.ABC_size_entry.config(state="normal")
+      ABC_max=[0,0,0]
+      for ele in self.dif_Elements.keys():
+        for dim in range(3):
+          max_dim=max(self.dif_Elements[ele][dim])
+          if max_dim>ABC_max[dim]:
+            ABC_max[dim]=round(max_dim,2)
+      self.ABC=str(ABC_max[0])+" "+str(ABC_max[1])+" "+str(ABC_max[2])
+      self.ABC_size_entry.delete(0,tk.END)
+      self.ABC_size_entry.insert(tk.END,self.ABC)
+    elif self.ABC_check_var.get()=="FALSE":
+      self.ABC="0.00 0.00 0.00"
+      self.ABC_size_entry.delete(0,tk.END)
+      self.ABC_size_entry.insert(tk.END,self.ABC)
+      self.ABC_size_entry.config(state=tk.DISABLED)
+
+  #Plot the geometry in 3d with or without the cell
+  def Show_Geometry(self):
+    ABC_size=self.ABC_size_entry.get()
+    plot_Geometry(self.dif_Elements,ABC_size)
