@@ -257,11 +257,12 @@ class Menubar:
             elif str(sys.version)[0]=="2":
                 import Analyse_Geometry as Analyse_Geometry
             try:
-                Geometry_analyse_data=Analyse_Geometry.coord_file_extract(geometry_file)
+                popup_geo=tk.Tk()
+                Analyse_Geometry.Geometry_popup(popup_geo,geometry_file)
             except:
-                Bottom_Frame_part.popup_error_file(self,geometry_file)
-            else:
-                Analyse_Geometry.plot_Geometry(Geometry_analyse_data)
+                popup_geo.destroy()
+                popup_geo=Bottom_Frame_part.popup_error_file(self,geometry_file)
+            popup_geo.mainloop()
 
     #Energy and Temperature plot for MD
     def MD_energy_temp_function(self,master):
