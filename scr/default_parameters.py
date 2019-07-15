@@ -47,6 +47,7 @@ def default_parameters(PROGRAM):
     SUBSYS["ELEMENTS"]=list()
     SUBSYS["VALENCE_ELEMENTS"]=[]
     SUBSYS["CHARGE"]="0"
+    SUBSYS["MULTIPLICITY"]="0"
     SUBSYS["FIXED"]=""
     SUBSYS["TARGET1"]="-1.0"
     SUBSYS["TARGET2"]="1.0"

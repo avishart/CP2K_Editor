@@ -134,7 +134,10 @@ def Force_Eval_DFT_subsection(space,tab,target_value,strength_value,filename,PRO
     content_DFT+=space+"&END XC\n"
     #CHARGE
     content_DFT+=space+"CHARGE"+tab+SUBSYS["CHARGE"]+"\n"
-    content_DFT+=space+"UKS"+tab+"TRUE"+"\n"
+    #Multiplicity
+    content_DFT+=space+"MULTIPLICITY"+tab+SUBSYS["MULTIPLICITY"]+"\n"
+    if float(SUBSYS["CHARGE"])!=0 or float(SUBSYS["MULTIPLICITY"]) not in [0,1]:
+        content_DFT+=space+"UKS"+tab+"TRUE"+"\n"
     #QS
     content_DFT+=space+"&QS"+"\n"
     space+="  "

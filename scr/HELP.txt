@@ -84,6 +84,7 @@ Cell: Give the cell size of the box.
 Centering molecule(s): Activate or deactivate centering of the molecule(s) in the cell defined.
 Periodic: Select the directions for periodic boundary conditions, if the periodic boundary conditions is not in all three direction a Poisson solver is needed.
 Charge: Give the charge of the total system.
+Multiplicity: Set the multiplicity of the system. CP2K will automatically calculate the multiplicity as 1 or 3 from the even or odd number of electrons if the multiplicity is set equal to zero.
 
 Fixed atoms: Select which atoms to fix in a dynamic calculation or VIBRATIONAL_ANALYSIS calculation (e.g. 1-7,9,12 or 1..7 9 12). 
 
