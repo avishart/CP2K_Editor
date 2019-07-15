@@ -483,6 +483,7 @@ class Bottom_Frame_part:
         SUBSYS["COORD"]=Top_F.SUBSYS_sec.SS_coord_file_entry.get()
         SUBSYS["ABC"]=Top_F.SUBSYS_sec.SS_Cell_entry.get()
         SUBSYS["CHARGE"]=Top_F.SUBSYS_sec.SS_Charge_entry.get()
+        SUBSYS["MULTIPLICITY"]=Top_F.SUBSYS_sec.SS_Multiplicity_entry.get()
         SUBSYS["FIXED"]=Top_F.SUBSYS_sec.SS_fixed_atoms_entry.get()
         SUBSYS["TARGET1"]=Top_F.SUBSYS_sec.SS_target1_entry.get()
         SUBSYS["TARGET2"]=str(float(SUBSYS["TARGET1"])+2)
@@ -696,8 +697,8 @@ class Global_section:
         self.run_type_btn.config(text=GLOBAL["RUN_TYPE"])
         if GLOBAL["RUN_TYPE"]!="ENERGY":
             Top_Frame_p.sec_motion.config(state="normal")
-            Top_Frame_p.SUBSYS_sec.SS_fixed_atoms_label.grid(row=9,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"])
-            Top_Frame_p.SUBSYS_sec.SS_fixed_atoms_entry.grid(row=9,column=1,sticky="WE")
+            Top_Frame_p.SUBSYS_sec.SS_fixed_atoms_label.grid(row=10,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"])
+            Top_Frame_p.SUBSYS_sec.SS_fixed_atoms_entry.grid(row=10,column=1,sticky="WE")
             if GLOBAL["PROPERTIES"]!="NONE":
                 self.each_label.grid(row=6,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"])
                 self.each_entry.grid(row=6,column=1,sticky="WE") 
@@ -712,8 +713,8 @@ class Global_section:
             self.each_label.grid_forget()
             self.each_entry.grid_forget()
             if GLOBAL["PROPERTIES"]=="VIBRATIONAL_ANALYSIS":
-                Top_Frame_p.SUBSYS_sec.SS_fixed_atoms_label.grid(row=9,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"])
-                Top_Frame_p.SUBSYS_sec.SS_fixed_atoms_entry.grid(row=9,column=1,sticky="WE")
+                Top_Frame_p.SUBSYS_sec.SS_fixed_atoms_label.grid(row=10,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"])
+                Top_Frame_p.SUBSYS_sec.SS_fixed_atoms_entry.grid(row=10,column=1,sticky="WE")
             else:
                 Top_Frame_p.SUBSYS_sec.SS_fixed_atoms_label.grid_forget()
                 Top_Frame_p.SUBSYS_sec.SS_fixed_atoms_entry.grid_forget()
@@ -753,12 +754,12 @@ class Global_section:
                 self.properties_info_nstates_label.grid_forget()
                 self.properties_info_nstates_entry.grid_forget()
             if GLOBAL["PROPERTIES"]=="CDFT":
-                Top_Frame_p.SUBSYS_sec.SS_frag1_label.grid(row=10,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"])
-                Top_Frame_p.SUBSYS_sec.SS_frag1_entry.grid(row=10,column=1,sticky="WE")
-                Top_Frame_p.SUBSYS_sec.SS_frag2_label.grid(row=11,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"])
-                Top_Frame_p.SUBSYS_sec.SS_frag2_entry.grid(row=11,column=1,sticky="WE")
-                Top_Frame_p.SUBSYS_sec.SS_target1_label.grid(row=12,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"])
-                Top_Frame_p.SUBSYS_sec.SS_target1_entry.grid(row=12,column=1,sticky="WE")            
+                Top_Frame_p.SUBSYS_sec.SS_frag1_label.grid(row=11,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"])
+                Top_Frame_p.SUBSYS_sec.SS_frag1_entry.grid(row=11,column=1,sticky="WE")
+                Top_Frame_p.SUBSYS_sec.SS_frag2_label.grid(row=12,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"])
+                Top_Frame_p.SUBSYS_sec.SS_frag2_entry.grid(row=12,column=1,sticky="WE")
+                Top_Frame_p.SUBSYS_sec.SS_target1_label.grid(row=13,column=0,sticky=tk.W,pady=PROGRAM["pady_line_size"])
+                Top_Frame_p.SUBSYS_sec.SS_target1_entry.grid(row=13,column=1,sticky="WE")            
             else:
                 Top_Frame_p.SUBSYS_sec.SS_target1_label.grid_forget()
                 Top_Frame_p.SUBSYS_sec.SS_target1_entry.grid_forget()
@@ -1434,7 +1435,7 @@ class Subsys_section:
             self.SS_Poisson_solver_btn.config(state="normal")
 
         #CHARGE on the system
-        #Make label for coordination file
+        #Make label for charge
         i+=1;j=0
         tk.Label(SUBSYS_Frame,text="Charge: ").grid(row=i,column=j,sticky=tk.W,pady=PROGRAM["pady_line_size"])
         j+=1
@@ -1443,6 +1444,18 @@ class Subsys_section:
         #Give the default Charge
         self.SS_Charge_entry.insert(tk.END,SUBSYS["CHARGE"])
         self.SS_Charge_entry.grid(row=i,column=j,sticky="WE")
+        j+=1
+        #Multiplicity of the system
+
+        #Make label for multiplicity
+        i+=1;j=0
+        tk.Label(SUBSYS_Frame,text="Multiplicity:").grid(row=i,column=j,sticky=tk.W,pady=PROGRAM["pady_line_size"])
+        j+=1
+        #Make Entry for Charge
+        self.SS_Multiplicity_entry=tk.Entry(SUBSYS_Frame,justify=tk.LEFT)
+        #Give the default Charge
+        self.SS_Multiplicity_entry.insert(tk.END,SUBSYS["MULTIPLICITY"])
+        self.SS_Multiplicity_entry.grid(row=i,column=j,sticky="WE")
         j+=1
 
         #Fixed atoms
